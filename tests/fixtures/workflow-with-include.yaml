@@ -1,0 +1,23 @@
+id: incl456
+name: インクルードテスト
+active: false
+nodes:
+  - id: "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f"
+    name: 手動トリガー
+    type: n8n-nodes-base.manualTrigger
+    typeVersion: 1
+    position: [0, 0]
+    parameters: {}
+  - id: "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a"
+    name: コード実行
+    type: n8n-nodes-base.code
+    typeVersion: 1
+    position: [200, 0]
+    parameters:
+      jsCode: !include included-code.js
+connections:
+  手動トリガー:
+    main:
+      - - node: コード実行
+          type: main
+          index: 0

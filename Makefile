@@ -1,0 +1,52 @@
+.PHONY: all build cross-compile test typecheck lint format size-check clean
+
+all: build
+
+# Detect biome binary (handle Rosetta x64/arm64 mismatch)
+BIOME := $(shell command -v biome 2>/dev/null || \
+	([ -f node_modules/@biomejs/cli-darwin-arm64/biome ] && echo node_modules/@biomejs/cli-darwin-arm64/biome) || \
+	([ -f node_modules/@biomejs/cli-linux-x64/biome ] && echo node_modules/@biomejs/cli-linux-x64/biome) || \
+	echo "bunx biome")
+
+CLI_VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo "dev")
+CLI_GIT_COMMIT ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+CLI_BUILD_DATE ?= $(shell date -u +%Y-%m-%dT%H:%M:%SZ)
+
+DEFINE_FLAGS = \
+	--define "CLI_VERSION='$(CLI_VERSION)'" \
+	--define "CLI_GIT_COMMIT='$(CLI_GIT_COMMIT)'" \
+	--define "CLI_BUILD_DATE='$(CLI_BUILD_DATE)'"
+
+build:
+	bun build src/index.ts --compile --outfile n8n-cli --minify $(DEFINE_FLAGS)
+
+cross-compile:
+	bun build src/index.ts --compile --target=bun-darwin-arm64 --outfile dist/n8n-cli-darwin-arm64 --minify $(DEFINE_FLAGS)
+	bun build src/index.ts --compile --target=bun-darwin-x64 --outfile dist/n8n-cli-darwin-x64 --minify $(DEFINE_FLAGS)
+	bun build src/index.ts --compile --target=bun-linux-x64 --outfile dist/n8n-cli-linux-x64 --minify $(DEFINE_FLAGS)
+	bun build src/index.ts --compile --target=bun-windows-x64 --outfile dist/n8n-cli-windows-x64 --minify $(DEFINE_FLAGS)
+
+test:
+	bun test
+
+typecheck:
+	bunx tsc --noEmit
+
+lint:
+	$(BIOME) check src/ tests/
+
+format:
+	$(BIOME) format --write src/ tests/
+
+size-check:
+	@size=$$(stat -f%z n8n-cli 2>/dev/null || stat -c%s n8n-cli 2>/dev/null); \
+	limit=104857600; \
+	if [ "$$size" -gt "$$limit" ]; then \
+		echo "ERROR: Binary size $${size} bytes exceeds 100MB limit"; exit 1; \
+	else \
+		echo "OK: Binary size $${size} bytes (limit: $${limit})"; \
+	fi
+
+clean:
+	rm -f n8n-cli
+	rm -rf dist/
