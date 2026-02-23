@@ -1,8 +1,8 @@
 import type { Command } from "commander";
-import type { Execution, ExecutionStatus } from "../../api/execution-service.ts";
-import { formatJSON } from "../output/json.ts";
-import { formatTable } from "../output/table.ts";
-import { resolveContext } from "../root.ts";
+import type { Execution, ExecutionStatus } from "@/api/execution-service.ts";
+import { formatJSON } from "@/cli/output/json.ts";
+import { formatTable } from "@/cli/output/table.ts";
+import { resolveContext } from "@/cli/root.ts";
 
 export function registerExecutionListCommand(parent: Command): void {
   parent

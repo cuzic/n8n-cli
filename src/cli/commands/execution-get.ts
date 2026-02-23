@@ -1,8 +1,8 @@
 import type { Command } from "commander";
-import type { Execution } from "../../api/execution-service.ts";
-import { formatJSON } from "../output/json.ts";
-import { formatKeyValue, formatTable } from "../output/table.ts";
-import { resolveContext } from "../root.ts";
+import type { Execution } from "@/api/execution-service.ts";
+import { formatJSON } from "@/cli/output/json.ts";
+import { formatKeyValue, formatTable } from "@/cli/output/table.ts";
+import { resolveContext } from "@/cli/root.ts";
 
 export function registerExecutionGetCommand(parent: Command): void {
   parent
