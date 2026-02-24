@@ -144,4 +144,25 @@ export class ExecutionService {
 
     throw new Error(`timeout waiting for execution ${id} to complete`);
   }
+
+  /** DeleteExecution deletes an execution by ID */
+  async deleteExecution(id: string): Promise<Execution> {
+    const path = `/executions/${encodeURIComponent(id)}`;
+    const data = await this.client.delete(path);
+    return JSON.parse(data) as Execution;
+  }
+
+  /** RetryExecution retries a failed execution */
+  async retryExecution(id: string): Promise<Execution> {
+    const path = `/executions/${encodeURIComponent(id)}/retry`;
+    const data = await this.client.post(path);
+    return JSON.parse(data) as Execution;
+  }
+
+  /** StopExecution stops a running execution */
+  async stopExecution(id: string): Promise<Execution> {
+    const path = `/executions/${encodeURIComponent(id)}/stop`;
+    const data = await this.client.post(path);
+    return JSON.parse(data) as Execution;
+  }
 }
