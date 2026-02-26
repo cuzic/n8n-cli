@@ -3,6 +3,7 @@ import { registerExecutionCommand } from "./cli/commands/execution.ts";
 import { registerFmtCommand } from "./cli/commands/fmt.ts";
 import { registerImportCommand } from "./cli/commands/import.ts";
 import { registerLintCommand } from "./cli/commands/lint.ts";
+import { registerTagCommand } from "./cli/commands/tag.ts";
 import { registerTestCommand } from "./cli/commands/test.ts";
 import { registerWorkflowCommand } from "./cli/commands/workflow.ts";
 import { createProgram } from "./cli/root.ts";
@@ -12,6 +13,7 @@ const program = createProgram();
 // Register commands
 registerWorkflowCommand(program);
 registerExecutionCommand(program);
+registerTagCommand(program);
 registerApplyCommand(program);
 registerImportCommand(program);
 registerLintCommand(program);
