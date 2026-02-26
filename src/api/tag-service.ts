@@ -87,6 +87,26 @@ export class TagService {
     }
   }
 
+  /** GetTag retrieves a tag by ID */
+  async getTag(id: string): Promise<Tag> {
+    const path = `/tags/${encodeURIComponent(id)}`;
+    const data = await this.client.get(path);
+    return JSON.parse(data) as Tag;
+  }
+
+  /** UpdateTag updates an existing tag */
+  async updateTag(id: string, input: TagInput): Promise<Tag> {
+    const path = `/tags/${encodeURIComponent(id)}`;
+    const data = await this.client.put(path, input);
+    return JSON.parse(data) as Tag;
+  }
+
+  /** DeleteTag deletes a tag by ID */
+  async deleteTag(id: string): Promise<void> {
+    const path = `/tags/${encodeURIComponent(id)}`;
+    await this.client.delete(path);
+  }
+
   /** UpdateWorkflowTags updates the tags for a workflow (replaces all tags) */
   async updateWorkflowTags(workflowId: string, tagIds: TagIDInput[]): Promise<void> {
     const path = `/workflows/${encodeURIComponent(workflowId)}/tags`;
