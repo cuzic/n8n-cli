@@ -2,6 +2,7 @@ import { RuleRegistry } from "../registry.ts";
 import { aiAgentOutputRefRule } from "./ai-agent-output-ref.ts";
 import { connectionRefRule } from "./connection-ref.ts";
 import { expressionModePrefixRule } from "./expression-mode-prefix.ts";
+import { hardcodedSecretsRule } from "./hardcoded-secrets.ts";
 import { implicitJsonRefRule } from "./implicit-json-ref.ts";
 import { jsonSyntaxRule } from "./json-syntax.ts";
 import { nodeParamsRule } from "./node-params.ts";
@@ -20,6 +21,7 @@ export function registerDefaultRules(): RuleRegistry {
   registry.register(orphanedNodeRule);
   registry.register(implicitJsonRefRule);
   registry.register(expressionModePrefixRule);
+  registry.register(hardcodedSecretsRule);
   registry.register(aiAgentOutputRefRule);
   registry.register(nodeParamsRule);
   registry.register(nodeRefFieldCheckRule);
